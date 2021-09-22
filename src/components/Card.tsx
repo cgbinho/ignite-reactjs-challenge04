@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-interface Card {
+export interface Card {
   title: string;
   description: string;
   url: string;
