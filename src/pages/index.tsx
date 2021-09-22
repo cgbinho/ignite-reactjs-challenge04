@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { Box, Button } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
@@ -23,11 +24,12 @@ interface ImagesQueryResponse {
     };
   }[];
 }
+
 export default function Home(): JSX.Element {
   const fetchImages = async ({
     pageParam = null,
-  }): Promise<ImagesQueryResponse[]> => {
-    const { data } = await api.get('/api/images', {
+  }): Promise<ImagesQueryResponse> => {
+    const { data } = await api.get(`/api/images`, {
       params: { after: pageParam },
     });
     return data;
@@ -41,15 +43,19 @@ export default function Home(): JSX.Element {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery('images', fetchImages, {
-    getNextPageParam: nextPage => nextPage.after ?? null,
+    getNextPageParam: nextPage => nextPage?.after,
   });
 
   const formattedData = useMemo(() => {
-    return data?.pages.map(page => page.data).flat();
+    return data?.pages?.map(page => page.data).flat();
   }, [data]);
 
-  if (isLoading) return <Loading />;
-  if (isError) return <Error />;
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <>
