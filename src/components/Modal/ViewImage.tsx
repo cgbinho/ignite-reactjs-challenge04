@@ -37,8 +37,7 @@ export function ModalViewImage({
           <Image
             src={imgUrl}
             alt={imgUrl}
-            maxW={['320px', '540px', '900px']}
-            maxH={['360px', '440px', '600px']}
+            {...{ maxW, maxH }}
             objectFit="cover"
             borderTopRadius="md"
           />
